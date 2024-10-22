@@ -25,7 +25,7 @@ public class CourseInfoServices {
             double mid = responseCourse.rates().getFirst().mid();
             WriteInfo writeInfo = new WriteInfo(writeBody.currency(), writeBody.name(), mid);
             CourseInfo courseInfo = courseMapper.writeInfo(writeInfo);
-            return repository.save(courseInfo).map(savedCourseInfo -> new ResponseCurrency(mid));
+            return repository.save(courseInfo).map(courseMapper::response);
         });
     }
 

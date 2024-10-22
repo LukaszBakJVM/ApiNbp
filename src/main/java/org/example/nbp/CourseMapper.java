@@ -1,7 +1,6 @@
 package org.example.nbp;
 
-import org.example.nbp.dto.Rates;
-import org.example.nbp.dto.ResponseInfo;
+import org.example.nbp.dto.ResponseCurrency;
 import org.example.nbp.dto.WriteInfo;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +25,8 @@ public class CourseMapper {
     }
 
 
-    ResponseInfo responseAllInfo(CourseInfo courseInfo) {
-        return new ResponseInfo(courseInfo.getCurrency(), courseInfo.getPersonalData(), courseInfo.getTimeStamp(), courseInfo.getCourse());
-    }
-
-    private Rates rates(CourseInfo courseInfo) {
-        return new Rates(courseInfo.getCourse());
+    ResponseCurrency response(CourseInfo courseInfo) {
+        return new ResponseCurrency(courseInfo.getCourse());
     }
 
 
