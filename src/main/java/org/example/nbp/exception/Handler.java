@@ -9,10 +9,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 public class Handler {
 
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Error badRequestException(BadRequestException ex) {
-        return new Error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    @ExceptionHandler(CurrencyCodeException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Error badRequestException(CurrencyCodeException ex) {
+        return new Error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
 
