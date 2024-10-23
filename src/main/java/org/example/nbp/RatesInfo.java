@@ -4,7 +4,8 @@ import org.springframework.data.annotation.Id;
 
 import java.time.Instant;
 
-public class CourseInfo {
+public class RatesInfo {
+
     @Id
     private long id;
     private String currency;

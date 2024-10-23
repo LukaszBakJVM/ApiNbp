@@ -1,4 +1,4 @@
-package org.example.nbp.dto;
+package org.example.nbp.api;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package org.example.nbp;
 
+import org.example.nbp.dto.ResponseAllSavedRates;
 import org.example.nbp.dto.ResponseCurrency;
-import org.example.nbp.dto.WriteInfo;
+import org.example.nbp.dto.SaveRatesInfo;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,18 +16,21 @@ public class CourseMapper {
     }
 
 
-    CourseInfo writeInfo(WriteInfo writeInfo) {
-        CourseInfo courseInfo = new CourseInfo();
-        courseInfo.setCurrency(writeInfo.currency());
-        courseInfo.setPersonalData(writeInfo.name());
-        courseInfo.setTimeStamp(timestamp);
-        courseInfo.setCourse(writeInfo.value());
-        return courseInfo;
+    RatesInfo writeInfo(SaveRatesInfo saveRatesInfo) {
+        RatesInfo ratesInfo = new RatesInfo();
+        ratesInfo.setCurrency(saveRatesInfo.currency());
+        ratesInfo.setPersonalData(saveRatesInfo.name());
+        ratesInfo.setTimeStamp(timestamp);
+        ratesInfo.setCourse(saveRatesInfo.value());
+        return ratesInfo;
     }
 
 
-    ResponseCurrency response(CourseInfo courseInfo) {
-        return new ResponseCurrency(courseInfo.getCourse());
+    ResponseCurrency response(RatesInfo ratesInfo) {
+        return new ResponseCurrency(ratesInfo.getCourse());
+    }
+    ResponseAllSavedRates entityToDto(RatesInfo ratesInfo){
+        return new ResponseAllSavedRates(ratesInfo.getCurrency(),ratesInfo.getPersonalData(),ratesInfo.getTimeStamp(), ratesInfo.getCourse());
     }
 
 

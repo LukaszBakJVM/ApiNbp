@@ -1,7 +1,7 @@
 
 
 
-CREATE TABLE IF NOT EXISTS course_info
+CREATE TABLE IF NOT EXISTS rates_info
 (
     id integer primary key generated always as identity,
     currency VARCHAR(255),

@@ -1,11 +1,13 @@
 package org.example.nbp;
 
-import org.example.nbp.dto.ResponseCourse;
+import org.example.nbp.api.ResponseCourse;
+import org.example.nbp.dto.RequestRatesBody;
+import org.example.nbp.dto.ResponseAllSavedRates;
 import org.example.nbp.dto.ResponseCurrency;
-import org.example.nbp.dto.WriteBody;
-import org.example.nbp.dto.WriteInfo;
+import org.example.nbp.dto.SaveRatesInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -20,17 +22,20 @@ public class CourseInfoServices {
         this.repository = repository;
     }
 
-    Mono<ResponseCurrency> ratesMono(WriteBody writeBody) {
-        return nbpCourseInfo(writeBody.currency()).flatMap(responseCourse -> {
+    Mono<ResponseCurrency> ratesMono(RequestRatesBody requestRatesBody) {
+        return nbpCourseInfo(requestRatesBody.currency()).flatMap(responseCourse -> {
             double mid = responseCourse.rates().getFirst().mid();
-            WriteInfo writeInfo = new WriteInfo(writeBody.currency(), writeBody.name(), mid);
-            CourseInfo courseInfo = courseMapper.writeInfo(writeInfo);
-            return repository.save(courseInfo).map(courseMapper::response);
+            SaveRatesInfo saveRatesInfo = new SaveRatesInfo(requestRatesBody.currency(), requestRatesBody.name(), mid);
+            RatesInfo ratesInfo = courseMapper.writeInfo(saveRatesInfo);
+            return repository.save(ratesInfo).map(courseMapper::response);
         });
+    }
+    Flux<ResponseAllSavedRates>allSavedRates(){
+        return repository.findAll().map(courseMapper::entityToDto);
     }
 
 
-    Mono<ResponseCourse> nbpCourseInfo(String currency) {
+private Mono<ResponseCourse> nbpCourseInfo(String currency) {
         return webClient.get().uri("/api/exchangerates/rates/a/{code}", currency).header("Accept", "application/json").retrieve().bodyToMono(ResponseCourse.class);
     }
 }

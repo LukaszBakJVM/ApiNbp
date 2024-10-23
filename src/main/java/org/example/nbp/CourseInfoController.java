@@ -1,12 +1,11 @@
 package org.example.nbp;
 
+import org.example.nbp.dto.ResponseAllSavedRates;
 import org.example.nbp.dto.ResponseCurrency;
-import org.example.nbp.dto.WriteBody;
+import org.example.nbp.dto.RequestRatesBody;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -20,8 +19,12 @@ public class CourseInfoController {
         this.services = services;
     }
 
-    @PostMapping()
-    Mono<ResponseEntity<ResponseCurrency>> currency(@RequestBody WriteBody writeBody) {
-        return services.ratesMono(writeBody).map(s->ResponseEntity.created(URI.create("/currencies")).body(s));
+    @PostMapping("/get-current-currency-value-command")
+    Mono<ResponseEntity<ResponseCurrency>> currency(@RequestBody RequestRatesBody requestRatesBody) {
+        return services.ratesMono(requestRatesBody).map(s->ResponseEntity.created(URI.create("/currencies")).body(s));
+    }
+    @GetMapping("/requests")
+    Flux<ResponseAllSavedRates>allRatesInfo(){
+        return services.allSavedRates();
     }
 }
