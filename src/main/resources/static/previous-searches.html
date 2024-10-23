@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyniki Walut</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Wyniki Walut</h1>
+<table id="currencyTable">
+    <thead>
+    <tr>
+        <th>Waluta</th>
+        <th>Nazwisko</th>
+        <th>Data</th>
+        <th>Wartość</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Wiersze z danymi będą wstawiane tutaj -->
+    </tbody>
+</table>
+
+<script>
+    fetch('/currencies/requests')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('currencyTable').getElementsByTagName('tbody')[0];
+
+            data.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = item.currency;
+                row.insertCell(1).textContent = item.name;
+                row.insertCell(2).textContent = new Date(item.date).toLocaleString();
+                row.insertCell(3).textContent = item.value;
+            });
+        })
+        .catch(error => {
+            console.error('Błąd:', error);
+        });
+</script>
+
+</body>
+</html>
