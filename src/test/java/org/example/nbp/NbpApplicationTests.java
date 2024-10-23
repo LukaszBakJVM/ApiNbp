@@ -14,6 +14,8 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -28,6 +30,8 @@ class NbpApplicationTests {
     static WireMockExtension wireMockServer = WireMockExtension.newInstance().options(wireMockConfig().port(dynamicPort)).build();
     @Autowired
     WebTestClient webTestClient;
+    @Autowired
+    RatesInfoRepository repository;
 
     @DynamicPropertySource
     static void registerDynamicProperties(DynamicPropertyRegistry registry) {
@@ -48,31 +52,67 @@ class NbpApplicationTests {
     static void stopPostgres() {
         postgreSQLContainer.stop();
     }
+
     @Test
-    void getRatesCHF_shouldReturnCreatedAndMid(){
+    void getRatesCHF_shouldReturnCreatedAndMid() {
         RequestRatesBody requestRatesBody = requestRatesBody("CHF", "Łukasz Bak");
-        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody)
-                .exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(4.636);
+        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(4.636);
+
+        Mono<RatesInfo> savedCurrencyRate = repository.findByCurrency(requestRatesBody.currency());
+
+        StepVerifier.create(savedCurrencyRate).expectNextMatches(rateInfo -> rateInfo.getCourse() == (4.636) && rateInfo.getPersonalData().equals("Łukasz Bak") && rateInfo.getCurrency().equals("CHF")).verifyComplete();
+
     }
+
     @Test
-    void getRatesEUR_shouldReturnCreatedAndMid(){
+    void getRatesEUR_shouldReturnCreatedAndMid() {
         RequestRatesBody requestRatesBody = requestRatesBody("EUR", "Jan Kowalski");
-        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody)
-                .exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(4.3344);
+        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(4.3344);
+
+        Mono<RatesInfo> savedCurrencyRate = repository.findByCurrency(requestRatesBody.currency());
+
+        StepVerifier.create(savedCurrencyRate).expectNextMatches(rateInfo -> rateInfo.getCourse() == (4.3344) && rateInfo.getPersonalData().equals("Jan Kowalski") && rateInfo.getCurrency().equals("EUR")).verifyComplete();
+
     }
+
     @Test
-    void getRatesGBP_shouldReturnCreatedAndMid(){
+    void getRatesGBP_shouldReturnCreatedAndMid() {
         RequestRatesBody requestRatesBody = requestRatesBody("GBP", "Jan Kowalski");
-        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody)
-                .exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(5.2168);
+        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(5.2168);
+
+        Mono<RatesInfo> savedCurrencyRate = repository.findByCurrency(requestRatesBody.currency());
+
+        StepVerifier.create(savedCurrencyRate).expectNextMatches(rateInfo -> rateInfo.getCourse() == (5.2168) && rateInfo.getPersonalData().equals("Jan Kowalski") && rateInfo.getCurrency().equals("GBP")).verifyComplete();
+
     }
+
     @Test
-    void getRatesHUF_shouldReturnCreatedAndMid(){
+    void getRatesHUF_shouldReturnCreatedAndMid() {
         RequestRatesBody requestRatesBody = requestRatesBody("HUF", "Jan Kowalski");
-        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody)
-                .exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(0.01079);
+        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isCreated().expectBody().jsonPath("$.value").isEqualTo(0.01079);
+
+        Mono<RatesInfo> savedCurrencyRate = repository.findByCurrency(requestRatesBody.currency());
+
+        StepVerifier.create(savedCurrencyRate).expectNextMatches(rateInfo -> rateInfo.getCourse() == (0.01079) && rateInfo.getPersonalData().equals("Jan Kowalski") && rateInfo.getCurrency().equals("HUF")).verifyComplete();
+
     }
-    private RequestRatesBody requestRatesBody(String currency,String name ){
-        return new RequestRatesBody(currency,name);
+
+    @Test
+    void getRatesEURO_shouldReturnNotFound() {
+        String jsonMessage = "{\"status\": 404,\"message\": \"Currency code EURO not found\"}";
+        RequestRatesBody requestRatesBody = requestRatesBody("EURO", "Jan Kowalski");
+        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isNotFound().expectBody().json(jsonMessage);
+    }
+
+    @Test
+    void getRatesUSD1_shouldReturnNotFound() {
+        String jsonMessage = "{\"status\": 404,\"message\": \"Currency code USD1 not found\"}";
+        RequestRatesBody requestRatesBody = requestRatesBody("USD1", "Jan Kowalski");
+        webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isNotFound().expectBody().json(jsonMessage);
+    }
+
+
+    private RequestRatesBody requestRatesBody(String currency, String name) {
+        return new RequestRatesBody(currency, name);
     }
 }

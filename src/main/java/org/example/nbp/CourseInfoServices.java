@@ -18,9 +18,9 @@ import reactor.core.publisher.Mono;
 public class CourseInfoServices {
     private final WebClient webClient;
     private final CourseMapper courseMapper;
-    private final CourseInfoRepository repository;
+    private final RatesInfoRepository repository;
 
-    public CourseInfoServices(WebClient.Builder webClient, CourseMapper courseMapper, CourseInfoRepository repository) {
+    public CourseInfoServices(WebClient.Builder webClient, CourseMapper courseMapper, RatesInfoRepository repository) {
         this.webClient = webClient.build();
         this.courseMapper = courseMapper;
         this.repository = repository;
