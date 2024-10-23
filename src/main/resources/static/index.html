@@ -63,7 +63,7 @@
             }
 
 
-            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('result').textContent = `Kurs: ${data.value}`;
         } catch (error) {
 
             document.getElementById('result').textContent =  error.message;
