@@ -9,14 +9,10 @@ import java.time.Instant;
 
 @Service
 public class CourseMapper {
-    private final Instant timestamp;
-
-    public CourseMapper(Instant timestamp) {
-        this.timestamp = timestamp;
-    }
 
 
     RatesInfo writeInfo(SaveRatesInfo saveRatesInfo) {
+        Instant timestamp = Instant.now();
         RatesInfo ratesInfo = new RatesInfo();
         ratesInfo.setCurrency(saveRatesInfo.currency());
         ratesInfo.setPersonalData(saveRatesInfo.name());
@@ -29,8 +25,9 @@ public class CourseMapper {
     ResponseCurrency response(RatesInfo ratesInfo) {
         return new ResponseCurrency(ratesInfo.getCourse());
     }
-    ResponseAllSavedRates entityToDto(RatesInfo ratesInfo){
-        return new ResponseAllSavedRates(ratesInfo.getCurrency(),ratesInfo.getPersonalData(),ratesInfo.getTimeStamp(), ratesInfo.getCourse());
+
+    ResponseAllSavedRates entityToDto(RatesInfo ratesInfo) {
+        return new ResponseAllSavedRates(ratesInfo.getCurrency(), ratesInfo.getPersonalData(), ratesInfo.getTimeStamp(), ratesInfo.getCourse());
     }
 
 

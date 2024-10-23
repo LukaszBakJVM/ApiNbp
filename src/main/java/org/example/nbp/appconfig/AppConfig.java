@@ -10,7 +10,6 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.nio.file.Files;
-import java.time.Instant;
 
 @Configuration
 public class AppConfig {
@@ -25,11 +24,6 @@ public class AppConfig {
             schemaSql = new String(Files.readAllBytes(resource.getFile().toPath()));
             databaseClient.sql(schemaSql).then().subscribe();
         };
-    }
-
-    @Bean
-    public Instant utcTime() {
-        return Instant.now();
     }
 
 
