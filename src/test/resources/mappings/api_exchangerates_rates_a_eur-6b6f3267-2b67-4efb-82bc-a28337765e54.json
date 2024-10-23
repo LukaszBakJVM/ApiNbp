@@ -1,0 +1,23 @@
+{
+  "id" : "6b6f3267-2b67-4efb-82bc-a28337765e54",
+  "name" : "api_exchangerates_rates_a_eur",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/EUR",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"table\":\"A\",\"currency\":\"euro\",\"code\":\"EUR\",\"rates\":[{\"no\":\"207/A/NBP/2024\",\"effectiveDate\":\"2024-10-23\",\"mid\":4.3344}]}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "ETag" : "\"mYS6qY/Eq207jIDk6kNJqdpDrcpR2ab9wK1jH12z698=\"",
+      "Vary" : "Accept-Encoding",
+      "Expires" : "-1",
+      "Pragma" : "no-cache",
+      "Date" : "Wed, 23 Oct 2024 14:25:47 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "6b6f3267-2b67-4efb-82bc-a28337765e54",
+  "persistent" : true
+}

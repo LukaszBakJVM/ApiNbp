@@ -1,0 +1,23 @@
+{
+  "id" : "2f7da970-eab6-425b-a199-0528c07ec434",
+  "name" : "api_exchangerates_rates_a_huf",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/HUF",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"table\":\"A\",\"currency\":\"forint (Węgry)\",\"code\":\"HUF\",\"rates\":[{\"no\":\"207/A/NBP/2024\",\"effectiveDate\":\"2024-10-23\",\"mid\":0.01079}]}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "ETag" : "\"LILigYyZXbrWOYcn+Jgu9AzaccbSRrcMzcmIPlPCrpE=\"",
+      "Vary" : "Accept-Encoding",
+      "Expires" : "-1",
+      "Pragma" : "no-cache",
+      "Date" : "Wed, 23 Oct 2024 14:26:28 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "2f7da970-eab6-425b-a199-0528c07ec434",
+  "persistent" : true
+}

@@ -1,0 +1,23 @@
+{
+  "id" : "1d374597-96d4-4e69-a3d1-31c863717407",
+  "name" : "api_exchangerates_rates_a_gbp",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/GBP",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"table\":\"A\",\"currency\":\"funt szterling\",\"code\":\"GBP\",\"rates\":[{\"no\":\"207/A/NBP/2024\",\"effectiveDate\":\"2024-10-23\",\"mid\":5.2168}]}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "ETag" : "\"pi8lvG25udA+m4k5usnhkxPSA8W6+vT3A4V4RiZqQd4=\"",
+      "Vary" : "Accept-Encoding",
+      "Expires" : "-1",
+      "Pragma" : "no-cache",
+      "Date" : "Wed, 23 Oct 2024 14:27:02 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "1d374597-96d4-4e69-a3d1-31c863717407",
+  "persistent" : true
+}

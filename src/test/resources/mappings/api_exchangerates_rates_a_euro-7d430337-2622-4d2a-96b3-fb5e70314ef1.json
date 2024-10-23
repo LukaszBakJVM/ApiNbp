@@ -1,0 +1,18 @@
+{
+  "id" : "7d430337-2622-4d2a-96b3-fb5e70314ef1",
+  "name" : "api_exchangerates_rates_a_euro",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/EURO",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 404,
+    "body" : "﻿404 NotFound",
+    "headers" : {
+      "Date" : "Wed, 23 Oct 2024 14:27:15 GMT",
+      "Content-Type" : "text/plain; charset=UTF-8"
+    }
+  },
+  "uuid" : "7d430337-2622-4d2a-96b3-fb5e70314ef1",
+  "persistent" : true
+}

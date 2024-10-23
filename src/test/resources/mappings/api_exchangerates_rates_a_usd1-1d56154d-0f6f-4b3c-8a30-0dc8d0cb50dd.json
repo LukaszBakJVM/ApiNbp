@@ -1,0 +1,18 @@
+{
+  "id" : "1d56154d-0f6f-4b3c-8a30-0dc8d0cb50dd",
+  "name" : "api_exchangerates_rates_a_usd1",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/USD1",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 404,
+    "body" : "﻿404 NotFound",
+    "headers" : {
+      "Date" : "Wed, 23 Oct 2024 14:27:28 GMT",
+      "Content-Type" : "text/plain; charset=UTF-8"
+    }
+  },
+  "uuid" : "1d56154d-0f6f-4b3c-8a30-0dc8d0cb50dd",
+  "persistent" : true
+}

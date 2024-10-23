@@ -1,0 +1,24 @@
+{
+  "id" : "43384694-60b2-46cf-bd5e-ce4a68402f73",
+  "name" : "api_exchangerates_rates_a_chf",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/CHF",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"table\":\"A\",\"currency\":\"frank szwajcarski\",\"code\":\"CHF\",\"rates\":[{\"no\":\"207/A/NBP/2024\",\"effectiveDate\":\"2024-10-23\",\"mid\":4.6360}]}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "ETag" : "\"oIyVwfrIne1RX8RTQJaIuKNgP7c4TcaD147ib2dJZtA=\"",
+      "Vary" : "Accept-Encoding",
+      "Expires" : "-1",
+      "Pragma" : "no-cache",
+      "Date" : "Wed, 23 Oct 2024 14:26:45 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "43384694-60b2-46cf-bd5e-ce4a68402f73",
+  "persistent" : true
+
+}

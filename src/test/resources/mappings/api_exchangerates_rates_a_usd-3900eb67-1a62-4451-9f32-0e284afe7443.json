@@ -1,0 +1,24 @@
+{
+  "id" : "3900eb67-1a62-4451-9f32-0e284afe7443",
+  "name" : "api_exchangerates_rates_a_usd",
+  "request" : {
+    "url" : "/api/exchangerates/rates/a/USD",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"table\":\"A\",\"currency\":\"dolar amerykański\",\"code\":\"USD\",\"rates\":[{\"no\":\"207/A/NBP/2024\",\"effectiveDate\":\"2024-10-23\",\"mid\":4.0176}]}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "ETag" : "\"oGkilmxf61PDDWeAZyQiuFCx9+xsGN63CNbmYFMQ9d0=\"",
+      "Set-Cookie" : "ee3la5eizeiY4Eix=iePaevi0; path=/",
+      "Vary" : "Accept-Encoding",
+      "Expires" : "-1",
+      "Pragma" : "no-cache",
+      "Date" : "Wed, 23 Oct 2024 14:25:38 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "3900eb67-1a62-4451-9f32-0e284afe7443",
+  "persistent" : true
+}
