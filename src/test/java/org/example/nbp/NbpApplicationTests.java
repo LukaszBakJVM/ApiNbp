@@ -120,7 +120,6 @@ class NbpApplicationTests {
         webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isNotFound().expectBody().json(jsonMessage);
     }
 
-
     @Test
     void getAllSavedRates_shouldReturnOk() {
         loadDataFromSqlFile();
@@ -135,7 +134,7 @@ class NbpApplicationTests {
     }
 
     private void loadDataFromSqlFile() {
-        String sqlScript ;
+        String sqlScript;
         try {
             sqlScript = new String(Files.readAllBytes(Paths.get("src/test/resources/data.sql")));
         } catch (IOException e) {
