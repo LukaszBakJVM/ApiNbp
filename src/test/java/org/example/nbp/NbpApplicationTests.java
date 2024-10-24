@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -28,7 +29,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 class NbpApplicationTests {
 
 
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest");
+    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest").withInitScript("schema.sql");
     @LocalServerPort
     private static int dynamicPort;
     @RegisterExtension
@@ -53,6 +54,7 @@ class NbpApplicationTests {
     @BeforeAll
     static void startPostgres() {
         postgreSQLContainer.start();
+
 
     }
 
@@ -119,17 +121,28 @@ class NbpApplicationTests {
         webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isNotFound().expectBody().json(jsonMessage);
     }
 
+    @Test
+    void getAllSavedRates_shouldReturnOkAndRatesInfo() {
+        loadDataFromSqlFile();
+        webTestClient.get().uri("/currencies/requests").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk().expectBody().json(Response.jsonData);
+    }
+
 
     private RequestRatesBody requestRatesBody(String currency, String name) {
         return new RequestRatesBody(currency, name);
     }
 
-    private void loadDataFromSqlFile() throws Exception {
-        String sqlScript = new String(Files.readAllBytes(Paths.get("src/test/resources/data.sql")));
+    private void loadDataFromSqlFile() {
+        String sqlScript;
+        try {
+            sqlScript = new String(Files.readAllBytes(Paths.get("src/test/resources/data.sql")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
         Flux.fromArray(sqlScript.split(";")).flatMap(sql -> databaseClient.sql(sql.trim()).then()).subscribe();
     }
-
+   
 
 }
