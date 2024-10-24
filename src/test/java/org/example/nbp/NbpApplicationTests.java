@@ -142,7 +142,7 @@ class NbpApplicationTests {
         }
 
 
-        Flux.fromArray(sqlScript.split(";")).map(String::trim).flatMap(sql -> databaseClient.sql(sql).then()).subscribe();
+        Flux.fromArray(sqlScript.split(";")).map(String::trim).filter(sql -> !sql.isEmpty()).flatMap(sql -> databaseClient.sql(sql).then()).subscribe();
 
 
     }
