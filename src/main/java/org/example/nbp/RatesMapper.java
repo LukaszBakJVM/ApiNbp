@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-public class CourseMapper {
+public class RatesMapper {
 
 
     RatesInfo writeInfo(SaveRatesInfo saveRatesInfo) {

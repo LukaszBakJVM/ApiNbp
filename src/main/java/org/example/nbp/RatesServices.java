@@ -15,14 +15,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class CourseInfoServices {
+public class RatesServices {
     private final WebClient webClient;
-    private final CourseMapper courseMapper;
+    private final RatesMapper ratesMapper;
     private final RatesInfoRepository repository;
 
-    public CourseInfoServices(WebClient.Builder webClient, CourseMapper courseMapper, RatesInfoRepository repository) {
+    public RatesServices(WebClient.Builder webClient, RatesMapper ratesMapper, RatesInfoRepository repository) {
         this.webClient = webClient.build();
-        this.courseMapper = courseMapper;
+        this.ratesMapper = ratesMapper;
         this.repository = repository;
     }
 
@@ -30,13 +30,13 @@ public class CourseInfoServices {
         return nbpCourseInfo(requestRatesBody.currency()).flatMap(responseCourse -> {
             double mid = responseCourse.rates().getFirst().mid();
             SaveRatesInfo saveRatesInfo = new SaveRatesInfo(requestRatesBody.currency(), requestRatesBody.name(), mid);
-            RatesInfo ratesInfo = courseMapper.writeInfo(saveRatesInfo);
-            return repository.save(ratesInfo).map(courseMapper::response);
+            RatesInfo ratesInfo = ratesMapper.writeInfo(saveRatesInfo);
+            return repository.save(ratesInfo).map(ratesMapper::response);
         });
     }
 
     Flux<ResponseAllSavedRates> allSavedRates() {
-        return repository.findAll().map(courseMapper::entityToDto);
+        return repository.findAll().map(ratesMapper::entityToDto);
     }
 
 

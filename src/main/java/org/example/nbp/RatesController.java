@@ -12,10 +12,10 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/currencies")
-public class CourseInfoController {
-    private final CourseInfoServices services;
+public class RatesController {
+    private final RatesServices services;
 
-    public CourseInfoController(CourseInfoServices services) {
+    public RatesController(RatesServices services) {
         this.services = services;
     }
 
