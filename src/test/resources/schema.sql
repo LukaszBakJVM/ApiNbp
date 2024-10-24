@@ -1,4 +1,4 @@
---DROP TABLE IF EXIST rates_info;
+
 CREATE TABLE IF NOT EXISTS rates_info
 (
     id integer primary key generated always as identity,

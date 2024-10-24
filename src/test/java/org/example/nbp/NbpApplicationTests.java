@@ -120,6 +120,7 @@ class NbpApplicationTests {
         webTestClient.post().uri("/currencies/get-current-currency-value-command").contentType(MediaType.APPLICATION_JSON).bodyValue(requestRatesBody).exchange().expectStatus().isNotFound().expectBody().json(jsonMessage);
     }
 
+
     @Test
     void getAllSavedRates_shouldReturnOk() {
         loadDataFromSqlFile();
