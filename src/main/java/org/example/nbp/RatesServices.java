@@ -26,7 +26,7 @@ public class RatesServices {
         this.repository = repository;
     }
 
-    Mono<ResponseCurrency> ratesMono(RequestRatesBody requestRatesBody) {
+    Mono<ResponseCurrency> saveRates(RequestRatesBody requestRatesBody) {
         return nbpCourseInfo(requestRatesBody.currency()).flatMap(responseCourse -> {
             double mid = responseCourse.rates().getFirst().mid();
             SaveRatesInfo saveRatesInfo = new SaveRatesInfo(requestRatesBody.currency(), requestRatesBody.name(), mid);

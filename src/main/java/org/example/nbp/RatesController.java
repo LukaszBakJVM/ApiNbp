@@ -21,7 +21,7 @@ public class RatesController {
 
     @PostMapping("/get-current-currency-value-command")
     Mono<ResponseEntity<ResponseCurrency>> currency(@RequestBody RequestRatesBody requestRatesBody) {
-        return services.ratesMono(requestRatesBody).map(s->ResponseEntity.created(URI.create("/currencies")).body(s));
+        return services.saveRates(requestRatesBody).map(s->ResponseEntity.created(URI.create("/currencies")).body(s));
     }
     @GetMapping("/requests")
     Flux<ResponseAllSavedRates>allRatesInfo(){
