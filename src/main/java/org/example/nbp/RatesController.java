@@ -1,14 +1,12 @@
 package org.example.nbp;
 
+import org.example.nbp.dto.RequestRatesBody;
 import org.example.nbp.dto.ResponseAllSavedRates;
 import org.example.nbp.dto.ResponseCurrency;
-import org.example.nbp.dto.RequestRatesBody;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("/currencies")
@@ -20,11 +18,14 @@ public class RatesController {
     }
 
     @PostMapping("/get-current-currency-value-command")
-    Mono<ResponseEntity<ResponseCurrency>> currency(@RequestBody RequestRatesBody requestRatesBody) {
-        return services.saveRates(requestRatesBody).map(s->ResponseEntity.created(URI.create("/currencies")).body(s));
+    @ResponseStatus(HttpStatus.CREATED)
+    Mono<ResponseCurrency> currency(@RequestBody RequestRatesBody requestRatesBody) {
+        return services.saveRates(requestRatesBody);
     }
+
     @GetMapping("/requests")
-    Flux<ResponseAllSavedRates>allRatesInfo(){
+    @ResponseStatus(HttpStatus.OK)
+    Flux<ResponseAllSavedRates> allRatesInfo() {
         return services.allSavedRates();
     }
 }
