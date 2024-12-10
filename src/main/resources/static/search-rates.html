@@ -39,7 +39,8 @@
 <pre id="result"></pre>
 
 <script>
-    // Funkcja do pobierania dostępnych kodów walut
+
+
     async function loadCurrencies() {
         try {
             const response = await fetch('/currencies/code');
@@ -61,7 +62,7 @@
         }
     }
 
-    // Wywołanie funkcji do załadowania walut po załadowaniu strony
+
     window.onload = loadCurrencies;
 
     document.getElementById('currencyForm').addEventListener('submit', async function (event) {
