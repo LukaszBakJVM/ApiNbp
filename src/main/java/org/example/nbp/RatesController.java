@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/currencies")
 public class RatesController {
@@ -27,5 +29,11 @@ public class RatesController {
     @ResponseStatus(HttpStatus.OK)
     Flux<ResponseAllSavedRates> allRatesInfo() {
         return services.allSavedRates();
+    }
+
+    @GetMapping("/code")
+    @ResponseStatus(HttpStatus.OK)
+    Mono<List<String>> api() {
+        return services.findRates();
     }
 }

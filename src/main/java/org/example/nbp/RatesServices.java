@@ -1,10 +1,7 @@
 package org.example.nbp;
 
 import org.example.nbp.api.ResponseCourse;
-import org.example.nbp.dto.RequestRatesBody;
-import org.example.nbp.dto.ResponseAllSavedRates;
-import org.example.nbp.dto.ResponseCurrency;
-import org.example.nbp.dto.SaveRatesInfo;
+import org.example.nbp.dto.*;
 import org.example.nbp.exception.CurrencyCodeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -13,6 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class RatesServices {
@@ -47,5 +46,10 @@ public class RatesServices {
             }
             return Mono.error(new ResponseStatusException(response.statusCode()));
         }).bodyToMono(ResponseCourse.class);
+    }
+
+    Mono<List<String>> findRates() {
+        return webClient.get().uri("/api/exchangerates/tables/A").header("Accept", "application/json").retrieve().bodyToFlux(TableA.class).flatMapIterable(TableA::rates).map(Rates::code).sort().collectList();
+
     }
 }
