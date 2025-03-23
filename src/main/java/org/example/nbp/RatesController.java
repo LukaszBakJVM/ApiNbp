@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/currencies")
 public class RatesController {
@@ -27,5 +30,18 @@ public class RatesController {
     @ResponseStatus(HttpStatus.OK)
     Flux<ResponseAllSavedRates> allRatesInfo() {
         return services.allSavedRates();
+    }
+
+    @GetMapping("/code")
+    @ResponseStatus(HttpStatus.OK)
+    Mono<List<String>> code() {
+        return services.findRates();
+    }
+
+    @GetMapping("/find-data")
+    @ResponseStatus(HttpStatus.OK)
+    Flux<ResponseCurrency> findData(@RequestParam(required = false) String code, @RequestParam(required = false) LocalDate data) {
+
+        return services.findByCurrencyAndTime(code, data);
     }
 }

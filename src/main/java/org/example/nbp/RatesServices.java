@@ -1,18 +1,20 @@
 package org.example.nbp;
 
 import org.example.nbp.api.ResponseCourse;
-import org.example.nbp.dto.RequestRatesBody;
-import org.example.nbp.dto.ResponseAllSavedRates;
-import org.example.nbp.dto.ResponseCurrency;
-import org.example.nbp.dto.SaveRatesInfo;
+import org.example.nbp.dto.*;
 import org.example.nbp.exception.CurrencyCodeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class RatesServices {
@@ -47,5 +49,37 @@ public class RatesServices {
             }
             return Mono.error(new ResponseStatusException(response.statusCode()));
         }).bodyToMono(ResponseCourse.class);
+    }
+
+    Mono<List<String>> findRates() {
+        return webClient.get().uri("/api/exchangerates/tables/A").header("Accept", "application/json").retrieve().bodyToFlux(TableA.class).flatMapIterable(TableA::rates).map(Rates::code).sort().collectList();
+
+    }
+
+    Flux<ResponseCurrency> findByCurrencyAndTime(String code, LocalDate data) {
+        if ((code == null || code.isEmpty()) && data != null) {
+            return findByData(data);
+        } else if (data == null) {
+            return findByCurrency(code);
+        }
+        return repository.findByCurrencyAndTimeStamp(code, data).map(ratesMapper::response).distinct();
+    }
+
+    private Flux<ResponseCurrency> findByCurrency(String code) {
+        return repository.findByCurrency(code).map(ratesMapper::response).distinct();
+    }
+
+    private Flux<ResponseCurrency> findByData(LocalDate data) {
+        return repository.findByTimeStampContaining(data).map(ratesMapper::response).distinct();
+    }
+
+
+    @Scheduled(cron = "0 0 11 * * ?")
+    private void scheduling() {
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = localDate.format(formatter);
+        findRates().flatMapMany(Flux::fromIterable).flatMap(s -> saveRates(new RequestRatesBody(s, formattedDate))).subscribe();
+
     }
 }

@@ -1,4 +1,6 @@
 package org.example.nbp.dto;
 
-public record ResponseCurrency(double value) {
+import java.time.LocalDate;
+
+public record ResponseCurrency(String currency, double value, LocalDate localDate) {
 }

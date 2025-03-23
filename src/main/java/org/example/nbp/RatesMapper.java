@@ -6,6 +6,8 @@ import org.example.nbp.dto.SaveRatesInfo;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Service
 public class RatesMapper {
@@ -23,11 +25,17 @@ public class RatesMapper {
 
 
     ResponseCurrency response(RatesInfo ratesInfo) {
-        return new ResponseCurrency(ratesInfo.getCourse());
+        LocalDate localDate = localDate(ratesInfo.getTimeStamp());
+        return new ResponseCurrency(ratesInfo.getCurrency(), ratesInfo.getCourse(), localDate);
     }
 
     ResponseAllSavedRates entityToDto(RatesInfo ratesInfo) {
         return new ResponseAllSavedRates(ratesInfo.getCurrency(), ratesInfo.getPersonalData(), ratesInfo.getTimeStamp(), ratesInfo.getCourse());
+    }
+
+    LocalDate localDate(Instant instant) {
+        return instant.atZone(ZoneId.of("Europe/Warsaw")).toLocalDate();
+
     }
 
 

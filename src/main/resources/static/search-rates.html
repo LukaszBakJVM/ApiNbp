@@ -9,9 +9,11 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        input, button {
+
+        input, button, select {
             margin: 5px 0;
         }
+
         pre {
             background: #f4f4f4;
             padding: 10px;
@@ -23,7 +25,9 @@
 <h1>Aktualna wartość waluty</h1>
 <form id="currencyForm">
     <label for="currency">Waluta:</label>
-    <input type="text" id="currency" name="currency" required>
+    <select id="currency" name="currency" required>
+        <!-- Opcje walut będą dodane dynamicznie -->
+    </select>
 
     <label for="name">Nazwa:</label>
     <input type="text" id="name" name="name" required>
@@ -35,6 +39,32 @@
 <pre id="result"></pre>
 
 <script>
+
+
+    async function loadCurrencies() {
+        try {
+            const response = await fetch('/currencies/code');
+            const currencies = await response.json();
+
+            if (!response.ok) {
+                throw new Error('Błąd podczas ładowania walut');
+            }
+
+            const currencySelect = document.getElementById('currency');
+            currencies.forEach(currency => {
+                const option = document.createElement('option');
+                option.value = currency;
+                option.textContent = currency;
+                currencySelect.appendChild(option);
+            });
+        } catch (error) {
+            document.getElementById('result').textContent = 'Błąd podczas ładowania walut: ' + error.message;
+        }
+    }
+
+
+    window.onload = loadCurrencies;
+
     document.getElementById('currencyForm').addEventListener('submit', async function (event) {
         event.preventDefault();
 
@@ -58,15 +88,12 @@
             const data = await response.json();
 
             if (!response.ok) {
-
                 throw new Error(data.message || 'Błąd sieciowy');
             }
 
-
             document.getElementById('result').textContent = `Kurs: ${data.value}`;
         } catch (error) {
-
-            document.getElementById('result').textContent =  error.message;
+            document.getElementById('result').textContent = error.message;
         }
     });
 </script>
