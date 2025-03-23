@@ -20,7 +20,7 @@
         .search-container {
             margin-bottom: 20px;
         }
-        .search-container input {
+        .search-container input, .search-container select {
             padding: 5px;
             margin-right: 10px;
         }
@@ -33,29 +33,33 @@
 
 <h1>Wyniki Walut</h1>
 
-
+<!-- Wyszukiwanie po dacie -->
 <div class="search-container">
     <label for="dateSearch">Wyszukaj po dacie:</label>
     <input type="date" id="dateSearch">
     <button onclick="searchData()">Szukaj po dacie</button>
 </div>
 
-
+<!-- Wyszukiwanie po kodzie waluty -->
 <div class="search-container">
     <label for="codeSearch">Wyszukaj po kodzie waluty:</label>
-    <input type="text" id="codeSearch" placeholder="np. USD, EUR">
-    <button onclick="searchCode()">Szukaj po kodzie</button>
+    <select id="codeSearch" required>
+        <!-- Opcje kodów walut będą dodane dynamicznie -->
+    </select>
+    <button onclick="searchCode()">Szukaj po kodzie waluty</button>
 </div>
 
-
+<!-- Wyszukiwanie po dacie i kodzie waluty -->
 <div class="search-container">
-    <label for="dateSearchBoth">Wyszukaj po dacie i kodzie:</label>
+    <label for="dateSearchBoth">Wyszukaj po dacie i kodzie waluty:</label>
     <input type="date" id="dateSearchBoth">
-    <input type="text" id="codeSearchBoth" placeholder="np. USD">
-    <button onclick="searchBoth()">Szukaj po dacie i kodzie</button>
+    <select id="codeSearchBoth" required>
+        <!-- Opcje kodów walut będą dodane dynamicznie -->
+    </select>
+    <button onclick="searchBoth()">Szukaj po dacie i kodzie waluty</button>
 </div>
 
-
+<!-- Tabela wyników -->
 <table id="currencyTable">
     <thead>
     <tr>
@@ -71,10 +75,45 @@
 
 <script>
 
+    // Funkcja do załadowania kodów walut z endpointu
+    async function loadCurrencies() {
+        try {
+            const response = await fetch('/currencies/code');
+            const currencies = await response.json();
+
+            if (!response.ok) {
+                throw new Error('Błąd podczas ładowania walut');
+            }
+
+            const currencySelects = [
+                document.getElementById('codeSearch'),
+                document.getElementById('codeSearchBoth')
+            ];
+
+            // Usunięcie istniejących opcji
+            currencySelects.forEach(select => {
+                select.innerHTML = '';
+            });
+
+            // Dodanie nowych opcji z dynamicznie załadowanych danych
+            currencies.forEach(currency => {
+                currencySelects.forEach(select => {
+                    const option = document.createElement('option');
+                    option.value = currency;
+                    option.textContent = currency;
+                    select.appendChild(option);
+                });
+            });
+
+        } catch (error) {
+            document.getElementById('result').textContent = 'Błąd podczas ładowania walut: ' + error.message;
+        }
+    }
+
+    // Funkcja do wyszukiwania po dacie
     function searchData() {
         const date = document.getElementById("dateSearch").value;
         if (date) {
-
             fetch(`/currencies/find-data?date=${date}`)
                 .then(response => response.json())
                 .then(data => updateTable(data))
@@ -84,11 +123,10 @@
         }
     }
 
-
+    // Funkcja do wyszukiwania po kodzie waluty
     function searchCode() {
         const code = document.getElementById("codeSearch").value;
         if (code) {
-            // Wysyłamy zapytanie z kodem waluty
             fetch(`/currencies/find-data?code=${code}`)
                 .then(response => response.json())
                 .then(data => updateTable(data))
@@ -98,13 +136,12 @@
         }
     }
 
-
+    // Funkcja do wyszukiwania po dacie i kodzie waluty
     function searchBoth() {
         const date = document.getElementById("dateSearchBoth").value;
         const code = document.getElementById("codeSearchBoth").value;
 
         if (date && code) {
-            // Wysyłamy zapytanie z datą i kodem waluty
             fetch(`/currencies/find-data?date=${date}&code=${code}`)
                 .then(response => response.json())
                 .then(data => updateTable(data))
@@ -114,22 +151,30 @@
         }
     }
 
-
+    // Funkcja do aktualizacji tabeli
     function updateTable(data) {
         const tableBody = document.getElementById('currencyTable').getElementsByTagName('tbody')[0];
         tableBody.innerHTML = ''; // Czyszczenie tabeli przed dodaniem nowych danych
 
-        data.forEach(item => {
+        if (data && data.length > 0) {
+            data.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = item.currency;
+                row.insertCell(1).textContent = item.value;
+                const formattedDate = new Date(item.date).toLocaleDateString('pl-PL');
+                row.insertCell(2).textContent = formattedDate; // Wyświetlenie tylko daty bez godziny
+            });
+        } else {
             const row = tableBody.insertRow();
-
-            row.insertCell(0).textContent = item.currency;
-            row.insertCell(1).textContent = item.value;
-
-
-            const formattedDate = new Date(item.date).toLocaleDateString('pl-PL');
-            row.insertCell(2).textContent = formattedDate; // Wyświetlenie tylko daty bez godziny
-        });
+            const cell = row.insertCell(0);
+            cell.colSpan = 3;
+            cell.textContent = "Brak wyników dla wybranych kryteriów.";
+        }
     }
+
+    // Ładowanie walut przy załadowaniu strony
+    window.onload = loadCurrencies;
+
 </script>
 
 </body>
