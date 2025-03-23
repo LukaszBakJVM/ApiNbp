@@ -56,21 +56,21 @@ public class RatesServices {
 
     }
 
-    Flux<ResponseCurrency> findByCurrencyAndTime(String code, LocalDate data) {
-        if ((code == null || code.isEmpty()) && data != null) {
-            return findByData(data);
-        } else if (data == null) {
+    Flux<ResponseCurrency> findByCurrencyAndTime(String code, LocalDate date) {
+        if ((code == null || code.isEmpty()) && date != null) {
+            return findByData(date);
+        } else if (date == null) {
             return findByCurrency(code);
         }
-        return repository.findByCurrencyAndTimeStamp(code, data).map(ratesMapper::response).distinct();
+        return repository.findByCurrencyAndTimeStamp(code, date).map(ratesMapper::response).distinct();
     }
 
     private Flux<ResponseCurrency> findByCurrency(String code) {
         return repository.findByCurrency(code).map(ratesMapper::response).distinct();
     }
 
-    private Flux<ResponseCurrency> findByData(LocalDate data) {
-        return repository.findByTimeStampContaining(data).map(ratesMapper::response).distinct();
+    private Flux<ResponseCurrency> findByData(LocalDate date) {
+        return repository.findByTimeStampContaining(date).map(ratesMapper::response).distinct();
     }
 
 

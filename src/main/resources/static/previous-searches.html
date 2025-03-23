@@ -17,42 +17,119 @@
         th {
             background-color: #f2f2f2;
         }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .search-container button {
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
 
 <h1>Wyniki Walut</h1>
+
+
+<div class="search-container">
+    <label for="dateSearch">Wyszukaj po dacie:</label>
+    <input type="date" id="dateSearch">
+    <button onclick="searchData()">Szukaj po dacie</button>
+</div>
+
+
+<div class="search-container">
+    <label for="codeSearch">Wyszukaj po kodzie waluty:</label>
+    <input type="text" id="codeSearch" placeholder="np. USD, EUR">
+    <button onclick="searchCode()">Szukaj po kodzie</button>
+</div>
+
+
+<div class="search-container">
+    <label for="dateSearchBoth">Wyszukaj po dacie i kodzie:</label>
+    <input type="date" id="dateSearchBoth">
+    <input type="text" id="codeSearchBoth" placeholder="np. USD">
+    <button onclick="searchBoth()">Szukaj po dacie i kodzie</button>
+</div>
+
+
 <table id="currencyTable">
     <thead>
     <tr>
         <th>Waluta</th>
-        <th>Nazwisko</th>
-        <th>Data</th>
         <th>Wartość</th>
+        <th>Data</th>
     </tr>
     </thead>
     <tbody>
-    <!-- Wiersze z danymi będą wstawiane tutaj -->
+
     </tbody>
 </table>
 
 <script>
-    fetch('/currencies/requests')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.getElementById('currencyTable').getElementsByTagName('tbody')[0];
 
-            data.forEach(item => {
-                const row = tableBody.insertRow();
-                row.insertCell(0).textContent = item.currency;
-                row.insertCell(1).textContent = item.name;
-                row.insertCell(2).textContent = new Date(item.date).toLocaleString();
-                row.insertCell(3).textContent = item.value;
-            });
-        })
-        .catch(error => {
-            console.error('Błąd:', error);
+    function searchData() {
+        const date = document.getElementById("dateSearch").value;
+        if (date) {
+
+            fetch(`/currencies/find-data?date=${date}`)
+                .then(response => response.json())
+                .then(data => updateTable(data))
+                .catch(error => console.error('Błąd:', error));
+        } else {
+            alert("Proszę podać datę.");
+        }
+    }
+
+
+    function searchCode() {
+        const code = document.getElementById("codeSearch").value;
+        if (code) {
+            // Wysyłamy zapytanie z kodem waluty
+            fetch(`/currencies/find-data?code=${code}`)
+                .then(response => response.json())
+                .then(data => updateTable(data))
+                .catch(error => console.error('Błąd:', error));
+        } else {
+            alert("Proszę podać kod waluty.");
+        }
+    }
+
+
+    function searchBoth() {
+        const date = document.getElementById("dateSearchBoth").value;
+        const code = document.getElementById("codeSearchBoth").value;
+
+        if (date && code) {
+            // Wysyłamy zapytanie z datą i kodem waluty
+            fetch(`/currencies/find-data?date=${date}&code=${code}`)
+                .then(response => response.json())
+                .then(data => updateTable(data))
+                .catch(error => console.error('Błąd:', error));
+        } else {
+            alert("Proszę podać datę i kod waluty.");
+        }
+    }
+
+
+    function updateTable(data) {
+        const tableBody = document.getElementById('currencyTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = ''; // Czyszczenie tabeli przed dodaniem nowych danych
+
+        data.forEach(item => {
+            const row = tableBody.insertRow();
+
+            row.insertCell(0).textContent = item.currency;
+            row.insertCell(1).textContent = item.value;
+
+
+            const formattedDate = new Date(item.date).toLocaleDateString('pl-PL');
+            row.insertCell(2).textContent = formattedDate; // Wyświetlenie tylko daty bez godziny
         });
+    }
 </script>
 
 </body>

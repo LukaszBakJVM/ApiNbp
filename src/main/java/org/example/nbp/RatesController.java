@@ -40,8 +40,8 @@ public class RatesController {
 
     @GetMapping("/find-data")
     @ResponseStatus(HttpStatus.OK)
-    Flux<ResponseCurrency> findData(@RequestParam(required = false) String code, @RequestParam(required = false) LocalDate data) {
+    Flux<ResponseCurrency> findData(@RequestParam(required = false) String code, @RequestParam(required = false) LocalDate date) {
 
-        return services.findByCurrencyAndTime(code, data);
+        return services.findByCurrencyAndTime(code, date);
     }
 }
