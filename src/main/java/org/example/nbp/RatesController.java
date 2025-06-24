@@ -1,6 +1,5 @@
 package org.example.nbp;
 
-import org.example.nbp.dto.RequestRatesBody;
 import org.example.nbp.dto.ResponseAllSavedRates;
 import org.example.nbp.dto.ResponseCurrency;
 import org.springframework.http.HttpStatus;
@@ -20,11 +19,6 @@ public class RatesController {
         this.services = services;
     }
 
-    @PostMapping("/get-current-currency-value-command")
-    @ResponseStatus(HttpStatus.CREATED)
-    Mono<ResponseCurrency> currency(@RequestBody RequestRatesBody requestRatesBody) {
-        return services.saveRates(requestRatesBody);
-    }
 
     @GetMapping("/requests")
     @ResponseStatus(HttpStatus.OK)
