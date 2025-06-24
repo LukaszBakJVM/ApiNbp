@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import java.time.LocalDate;
 
 public interface RatesInfoRepository extends ReactiveCrudRepository<RatesInfo, Long> {
+    @Query("select *from rates_info r WHERE r.currency = :code order by id")
     Flux<RatesInfo> findByCurrency(String currency);
 
     @Query("SELECT * FROM rates_info r WHERE r.currency = :code AND  r.time_stamp::date = :date")
