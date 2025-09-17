@@ -6,6 +6,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import org.example.nbp.RatesServices;
 import org.example.nbp.dto.ResponseCurrency;
 
@@ -44,7 +45,10 @@ public class SearchByData extends VerticalLayout {
         Button findByDate = new Button("Wyszukaj dane", event -> findByCurrencyAndTime());
         Button clear = new Button("Wyczyśc pola",clearFields->clearFields());
 
-        add(currency, datePicker, findByDate, clear,grid);
+        RouterLink index = new RouterLink("Powrót na strone głowną", IndexView.class);
+        index.getStyle().set("font-weight", "bold");
+
+        add(currency, datePicker, findByDate, clear,grid,index);
     }
 
     private void clearFields() {
