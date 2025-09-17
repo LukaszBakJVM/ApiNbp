@@ -1,13 +1,13 @@
 package org.example.nbp;
 
 import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
 
-public interface RatesInfoRepository extends ReactiveCrudRepository<RatesInfo, Long> {
+public interface RatesInfoRepository extends R2dbcRepository<RatesInfo, Long> {
     @Query("select *from rates_info r WHERE r.currency = :code order by id")
     Flux<RatesInfo> findByCurrency(String currency);
 

@@ -5,10 +5,8 @@ import org.example.nbp.dto.ResponseCurrency;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/currencies")
@@ -26,11 +24,6 @@ public class RatesController {
         return services.allSavedRates();
     }
 
-    @GetMapping("/code")
-    @ResponseStatus(HttpStatus.OK)
-    Mono<List<String>> code() {
-        return services.findRates();
-    }
 
     @GetMapping("/find-data")
     @ResponseStatus(HttpStatus.OK)
