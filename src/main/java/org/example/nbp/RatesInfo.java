@@ -9,7 +9,7 @@ public class RatesInfo {
     @Id
     private long id;
     private String currency;
-    private String personalData;
+
     private Instant timeStamp;
     private double course;
 
@@ -21,13 +21,6 @@ public class RatesInfo {
         this.currency = currency;
     }
 
-    public String getPersonalData() {
-        return personalData;
-    }
-
-    public void setPersonalData(String personalData) {
-        this.personalData = personalData;
-    }
 
     public Instant getTimeStamp() {
         return timeStamp;
