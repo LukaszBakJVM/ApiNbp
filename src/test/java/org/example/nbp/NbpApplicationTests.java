@@ -10,16 +10,10 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
-import reactor.core.publisher.Flux;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -36,11 +30,7 @@ class NbpApplicationTests {
     static WireMockExtension wireMockServer = WireMockExtension.newInstance().options(wireMockConfig().port(dynamicPort)).build();
     @Autowired
     WebTestClient webTestClient;
-    @Autowired
-    RatesInfoRepository repository;
 
-    @Autowired
-    private DatabaseClient databaseClient;
 
     @DynamicPropertySource
     static void registerDynamicProperties(DynamicPropertyRegistry registry) {
@@ -66,7 +56,7 @@ class NbpApplicationTests {
     @Test
     void getSavedRatesByCurrency_shouldReturnOk() {
         String currency = "AUD";
-        //   loadDataFromSqlFile();
+
         webTestClient.get().uri(uriBuilder -> uriBuilder.path("/currencies/find-data").queryParam("code", currency).build()).accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk().expectBody().json(Response.findByCurrency);
 
 
@@ -74,7 +64,7 @@ class NbpApplicationTests {
     @Test
     void getSavedRatesByDate_shouldReturnOk() {
         String date = "2024-10-24";
-        loadDataFromSqlFile();
+
         webTestClient.get().uri(uriBuilder -> uriBuilder.path("/currencies/find-data").queryParam("date", date).build()).accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk().expectBody().json(Response.findByDate);
 
 
@@ -89,24 +79,8 @@ class NbpApplicationTests {
 
     @Test
     void getAllSavedRates_shouldReturnOk() {
-        loadDataFromSqlFile();
+
         webTestClient.get().uri("/currencies/requests").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk().expectBody().json(Response.findAll);
-
-    }
-
-
-
-    private void loadDataFromSqlFile() {
-        String sqlScript;
-        try {
-            sqlScript = new String(Files.readAllBytes(Paths.get("src/test/resources/data.sql")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        Flux.fromArray(sqlScript.split(";")).map(String::trim).filter(sql -> !sql.isEmpty()).flatMap(sql -> databaseClient.sql(sql).then()).subscribe();
-
 
     }
 
