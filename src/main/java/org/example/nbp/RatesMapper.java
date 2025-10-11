@@ -33,7 +33,7 @@ public class RatesMapper {
         return new ResponseAllSavedRates(ratesInfo.getCurrency(), ratesInfo.getTimeStamp(), ratesInfo.getCourse());
     }
 
-    LocalDate localDate(Instant instant) {
+  private   LocalDate localDate(Instant instant) {
         return instant.atZone(ZoneId.of("Europe/Warsaw")).toLocalDate();
 
     }

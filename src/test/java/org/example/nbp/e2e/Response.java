@@ -1,4 +1,4 @@
-package org.example.nbp;
+package org.example.nbp.e2e;
 
 public class Response {
     static String findAll= """

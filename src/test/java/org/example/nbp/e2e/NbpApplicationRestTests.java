@@ -1,4 +1,4 @@
-package org.example.nbp;
+package org.example.nbp.e2e;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.AfterAll;
@@ -20,7 +20,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 
-class NbpApplicationTests {
+class NbpApplicationRestTests {
 
 
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest").withInitScript("schema.sql");
@@ -61,6 +61,7 @@ class NbpApplicationTests {
 
 
     }
+
     @Test
     void getSavedRatesByDate_shouldReturnOk() {
         String date = "2024-10-24";
@@ -69,12 +70,6 @@ class NbpApplicationTests {
 
 
     }
-
-
-
-
-
-
 
 
     @Test
